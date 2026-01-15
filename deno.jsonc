@@ -1,0 +1,23 @@
+{
+  "fmt": {
+    "lineWidth": 160
+  },
+  "name": "@reububble/jsx",
+  "version": "0.0.5",
+  "exports": {
+    "./jsx-runtime": "./runtime.ts",
+    "./jsx-dev-runtime": "./dev-runtime.ts",
+    "./types": "./types.ts",
+    "./define": "./define.ts"
+  },
+  "license": "MIT",
+  "publish": {
+    "exclude": ["jsx.code-workspace"]
+  },
+  "compilerOptions": {
+    "lib": [
+      "esnext",
+      "dom"
+    ]
+  }
+}
