@@ -3,7 +3,7 @@
     "lineWidth": 160
   },
   "name": "@reububble/jsx",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "exports": {
     "./jsx-runtime": "./runtime.ts",
     "./jsx-dev-runtime": "./dev-runtime.ts",
