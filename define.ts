@@ -15,7 +15,7 @@ type ExtendsOptions<
   extends: Base extends Tag ? TagError<`${Tag} cannot extend itself`> : Base;
 };
 
-type Default<T, Default> = T extends never ? Default : T;
+type Default<T, Default> = [T] extends [never] ? Default : T;
 
 /**
  * Define a custom element, optionally extending a base element
@@ -46,5 +46,3 @@ export function define<
 
   customElements.define(tag, ctor as unknown as CustomElementConstructor, rest.at(0) as ElementDefinitionOptions);
 }
-
-type A = { [K in "a"]: K extends "b" ? 1 : never }["a"] extends never ? true : false;
