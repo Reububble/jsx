@@ -17,6 +17,32 @@ type ExtendsOptions<
 
 type Default<T, Default> = [T] extends [never] ? Default : T;
 
+type MatchingBuiltIn<T extends HTMLElement> = {
+  [K in BuiltInTag]: HTMLElement extends HTMLElementTagNameMap[K] ? never
+    : T extends HTMLElementTagNameMap[K] ? K
+    : never;
+}[BuiltInTag];
+
+type MoreSpecificBuiltIn<
+  T extends HTMLElement,
+  Base extends MatchingBuiltIn<T>,
+> = {
+  [K in MatchingBuiltIn<T>]: K extends Base ? never
+    : HTMLElementTagNameMap[K] extends HTMLElementTagNameMap[Base] ? HTMLElementTagNameMap[Base] extends HTMLElementTagNameMap[K] ? never : K
+    : never;
+}[MatchingBuiltIn<T>];
+
+type MostSpecificBuiltIn<T extends HTMLElement> = {
+  [K in MatchingBuiltIn<T>]: [MoreSpecificBuiltIn<T, K>] extends [never] ? K : never;
+}[MatchingBuiltIn<T>];
+
+type DefineOptions<Tag extends keyof HTMLElementTagNameMap> = Default<
+  {
+    [K in MostSpecificBuiltIn<HTMLElementTagNameMap[Tag]>]: [options: ExtendsOptions<Tag & string, K>];
+  }[MostSpecificBuiltIn<HTMLElementTagNameMap[Tag]>],
+  []
+>;
+
 /**
  * Define a custom element, optionally extending a base element
  * The tag must be added to the global HTMLElementTagNameMap interface
@@ -31,14 +57,7 @@ export function define<
   tag: Tag,
   ctor: Tag extends CustomElementTag ? ElementCtor<HTMLElementTagNameMap[Base]>
     : TagError<`${Tag} is not a valid custom element tag`>,
-  ...rest: Default<
-    {
-      [K in BuiltInTag]: HTMLElement extends HTMLElementTagNameMap[K] ? never
-        : HTMLElementTagNameMap[Tag] extends HTMLElementTagNameMap[K] ? [options: ExtendsOptions<Tag & string, K>]
-        : never;
-    }[BuiltInTag],
-    []
-  >
+  ...rest: DefineOptions<Tag>
 ): void {
   if (customElements.get(tag)) {
     throw new Error(`Duplicate custom element tag: ${tag}`);

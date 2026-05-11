@@ -3,7 +3,7 @@
     "lineWidth": 160
   },
   "name": "@reububble/jsx",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "exports": {
     ".": "./mod.ts",
     "./jsx-runtime": "./runtime.ts",
