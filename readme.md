@@ -1,4 +1,68 @@
-To prevent structurally identical elements from being indistinguishable to the define function, add branding to the global scope in your package
+# @reububble/jsx
+
+A small DOM JSX runtime for TypeScript.
+
+## Setup
+
+Install the package from JSR:
+
+```sh
+deno add jsr:@reububble/jsx
+```
+
+Configure JSX in your `deno.jsonc` or `tsconfig.json` under `compilerOptions`:
+
+```jsonc
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@reububble/jsx",
+    "lib": ["dom", "dom.iterable", "esnext"]
+  }
+}
+```
+
+## Usage
+
+```tsx
+const button = (
+  <button
+    className="primary"
+    onClick={() => console.log("clicked")}
+    style={{ color: "white" }}
+  >
+    Click me
+  </button>
+);
+
+document.body.append(button);
+```
+
+Use `define` to register custom elements:
+
+```tsx
+import { define } from "@reububble/jsx";
+
+class MenuButton extends HTMLElement {
+  connectedCallback() {
+    this.replaceChildren(<button>Menu</button>);
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "menu-button": MenuButton;
+  }
+}
+
+define("menu-button", MenuButton);
+
+document.body.append(<menu-button></menu-button>);
+```
+
+## Custom Elements
+
+To prevent structurally identical elements from being indistinguishable to the define function, add branding to the global scope in your package:
 
 ```ts
 declare const tag: unique symbol;
