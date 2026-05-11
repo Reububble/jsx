@@ -11,9 +11,7 @@ export type IntrinsicElements = {
       [
         Prop in {
           [K in keyof HTMLElementTagNameMap[Tag]]: K extends `on${string}` ? K
-            : string extends HTMLElementTagNameMap[Tag][K] ? K
-            : number extends HTMLElementTagNameMap[Tag][K] ? K
-            : boolean extends HTMLElementTagNameMap[Tag][K] ? K
+            : HTMLElementTagNameMap[Tag][K] extends string | number | boolean ? K
             : never;
         }[keyof HTMLElementTagNameMap[Tag]]
       ]?: HTMLElementTagNameMap[Tag][Prop];
