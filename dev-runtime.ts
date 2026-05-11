@@ -96,7 +96,10 @@ export function jsxDEV(
   return element;
 }
 
+/** required in JSX namespace. Used for a single element */
 export const jsx = jsxDEV;
+/** required in JSX namespace. Used for static arrays */
 export const jsxs = jsxDEV;
 
+/** required export for jsxImportSource */
 export * as JSX from "./types.ts";

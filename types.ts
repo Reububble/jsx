@@ -1,3 +1,4 @@
+/** JSX props for every tag in `HTMLElementTagNameMap`. */
 export type IntrinsicElements = {
   [Tag in keyof HTMLElementTagNameMap]:
     & {
@@ -21,9 +22,14 @@ export type IntrinsicElements = {
     };
 };
 
+/** Constructor return type accepted by JSX component classes. */
 export type ElementClass = HTMLElementTagNameMap[keyof HTMLElementTagNameMap] extends { new (props: any): infer C extends HTMLElement } ? C : never;
 
+/** Element values returned by this JSX runtime. */
 export type Element = InstanceType<typeof Element>;
-export const Element = HTMLElement;
 
-type Child = string | Element;
+/** Runtime constructor used for `instanceof` checks against JSX elements. */
+export const Element: typeof HTMLElement = HTMLElement;
+
+/** Child value accepted by JSX elements. */
+export type Child = string | Element;
