@@ -25,21 +25,28 @@ type MatchingBuiltIn<T extends HTMLElement> = {
 
 type MoreSpecificBuiltIn<
   T extends HTMLElement,
-  Base extends MatchingBuiltIn<T>,
+  Base extends BuiltInTag,
+  Match extends BuiltInTag = MatchingBuiltIn<T>,
 > = {
-  [K in MatchingBuiltIn<T>]: K extends Base ? never
+  [K in Match]: K extends Base ? never
     : HTMLElementTagNameMap[K] extends HTMLElementTagNameMap[Base] ? HTMLElementTagNameMap[Base] extends HTMLElementTagNameMap[K] ? never : K
     : never;
-}[MatchingBuiltIn<T>];
+}[Match];
 
-type MostSpecificBuiltIn<T extends HTMLElement> = {
-  [K in MatchingBuiltIn<T>]: [MoreSpecificBuiltIn<T, K>] extends [never] ? K : never;
-}[MatchingBuiltIn<T>];
+type MostSpecificBuiltIn<
+  T extends HTMLElement,
+  Match extends BuiltInTag = MatchingBuiltIn<T>,
+> = {
+  [K in Match]: Default<MoreSpecificBuiltIn<T, K, Match>, K>;
+}[Match];
 
-type DefineOptions<Tag extends keyof HTMLElementTagNameMap> = Default<
+type DefineOptions<
+  Tag extends keyof HTMLElementTagNameMap,
+  Base extends BuiltInTag = MostSpecificBuiltIn<HTMLElementTagNameMap[Tag]>,
+> = Default<
   {
-    [K in MostSpecificBuiltIn<HTMLElementTagNameMap[Tag]>]: [options: ExtendsOptions<Tag & string, K>];
-  }[MostSpecificBuiltIn<HTMLElementTagNameMap[Tag]>],
+    [K in Base]: [options: ExtendsOptions<Tag & string, K>];
+  }[Base],
   []
 >;
 
