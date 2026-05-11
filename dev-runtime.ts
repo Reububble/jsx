@@ -1,3 +1,8 @@
+/**
+ * JSX automatic runtime used by `jsxImportSource` in development builds.
+ *
+ * @module
+ */
 import { Element } from "./types.ts";
 
 function createElement(tag: unknown) {
@@ -97,9 +102,9 @@ export function jsxDEV(
 }
 
 /** required in JSX namespace. Used for a single element */
-export const jsx = jsxDEV;
+export const jsx: typeof jsxDEV = jsxDEV;
 /** required in JSX namespace. Used for static arrays */
-export const jsxs = jsxDEV;
+export const jsxs: typeof jsxDEV = jsxDEV;
 
 /** required export for jsxImportSource */
 export * as JSX from "./types.ts";

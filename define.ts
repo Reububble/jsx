@@ -1,29 +1,42 @@
-type ElementCtor<T extends HTMLElement> = {
+/**
+ * Utilities for defining typed custom elements.
+ *
+ * @module
+ */
+/** Constructor type accepted by `define` for a custom element class. */
+export type ElementCtor<T extends HTMLElement> = {
   new (...args: any[]): T;
 };
 
-type BuiltInTag = Exclude<keyof HTMLElementTagNameMap, CustomElementTag>;
+/** Built-in element tag names that can be used with the `extends` option. */
+export type BuiltInTag = Exclude<keyof HTMLElementTagNameMap, CustomElementTag>;
 
-type CustomElementTag = `${string}-${string}`;
+/** Custom element tag names. A valid custom element name must contain a hyphen. */
+export type CustomElementTag = `${string}-${string}`;
 
-type TagError<Message extends string> = { error: Message; valid: never };
+/** Compile-time error shown when `define` is called with an invalid tag or base element. */
+export type TagError<Message extends string> = { error: Message; valid: never };
 
-type ExtendsOptions<
+/** Options object passed to `define` for a customized built-in element. */
+export type ExtendsOptions<
   Tag extends keyof HTMLElementTagNameMap,
   Base extends BuiltInTag,
 > = {
   extends: Base extends Tag ? TagError<`${Tag} cannot extend itself`> : Base;
 };
 
-type Default<T, Default> = [T] extends [never] ? Default : T;
+/** Selects `Fallback` when `T` resolves to `never`. */
+export type Default<T, Fallback> = [T] extends [never] ? Fallback : T;
 
-type MatchingBuiltIn<T extends HTMLElement> = {
+/** Built-in tag names whose element type matches `T`. */
+export type MatchingBuiltIn<T extends HTMLElement> = {
   [K in BuiltInTag]: HTMLElement extends HTMLElementTagNameMap[K] ? never
     : T extends HTMLElementTagNameMap[K] ? K
     : never;
 }[BuiltInTag];
 
-type MoreSpecificBuiltIn<
+/** Matching built-in tag names that are more specific than `Base`. */
+export type MoreSpecificBuiltIn<
   T extends HTMLElement,
   Base extends BuiltInTag,
   Match extends BuiltInTag = MatchingBuiltIn<T>,
@@ -33,14 +46,16 @@ type MoreSpecificBuiltIn<
     : never;
 }[Match];
 
-type MostSpecificBuiltIn<
+/** Most-specific built-in tag names matching `T`. */
+export type MostSpecificBuiltIn<
   T extends HTMLElement,
   Match extends BuiltInTag = MatchingBuiltIn<T>,
 > = {
   [K in Match]: Default<MoreSpecificBuiltIn<T, K, Match>, K>;
 }[Match];
 
-type DefineOptions<
+/** Optional rest parameter accepted by `define` for a tag. */
+export type DefineOptions<
   Tag extends keyof HTMLElementTagNameMap,
   Base extends BuiltInTag = MostSpecificBuiltIn<HTMLElementTagNameMap[Tag]>,
 > = Default<
