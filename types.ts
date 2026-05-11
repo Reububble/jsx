@@ -1,3 +1,8 @@
+/**
+ * JSX namespace types used by this runtime.
+ *
+ * @module
+ */
 /** JSX props for every tag in `HTMLElementTagNameMap`. */
 export type IntrinsicElements = {
   [Tag in keyof HTMLElementTagNameMap]:
