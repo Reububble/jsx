@@ -62,6 +62,8 @@ export function jsx(tag: any, props: any): Element {
   return element;
 }
 
+/** required in JSX namespace. Used for static arrays */
 export const jsxs = jsx;
 
+/** required namespace export for jsxImportSource */
 export * as JSX from "./types.ts";
